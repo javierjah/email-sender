@@ -3,7 +3,7 @@ import http from 'http';
 const options = {
   timeout: 2000,
   host: 'localhost',
-  port: process.env.PORT || 8080,
+  port: process.env.PORT || 3002,
   path: '/healthz', // must be the same as HEALTHCHECK in Dockerfile
 };
 
