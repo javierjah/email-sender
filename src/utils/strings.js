@@ -1,6 +1,7 @@
 function createEmailMissingParamsMessage(body) {
+  const email = !body.email ? 'email' : '';
   const userName = !body.userName ? 'userName' : '';
-  const orderNumber = !body.orderNumber ? 'phoneNumber' : '';
+  const orderNumber = !body.orderNumber ? 'orderNumber' : '';
   const phoneNumber = !body.phoneNumber ? 'phoneNumber' : '';
   const totalAmount = !body.totalAmount ? 'totalAmount' : '';
   const paymentType = !body.paymentType ? 'paymentType' : '';
@@ -10,6 +11,7 @@ function createEmailMissingParamsMessage(body) {
   const deliveryCost = !body.deliveryCost ? 'deliveryCost' : '';
 
   const missingParamsFilter = [
+    email,
     userName,
     phoneNumber,
     orderNumber,

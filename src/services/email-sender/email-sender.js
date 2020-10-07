@@ -4,7 +4,8 @@ import EmailTemplates from 'email-templates';
 
 const templateDir = path.resolve(__dirname, 'templates', 'purchase');
 const defaultSubject = 'Pedido Agua y Arina  ✔';
-const EMAILS = ['javier.palacios.h@gmail.com', 'dominic.fernandezv@gmail.com'];
+const defaultEmail = 'javier.palacios.h@gmail.com';
+const EMAILS = [defaultEmail];
 
 // email-templates init to parse html files
 const email = new EmailTemplates({
@@ -16,7 +17,7 @@ const email = new EmailTemplates({
   },
 });
 
-async function emailSender({ emailTo = EMAILS, subject = defaultSubject, emailParams }) {
+async function emailSender({ emailTo, subject = defaultSubject, emailParams }) {
   const emailSenderConfig = {
     path: templateDir,
     juiceResources: {
@@ -28,6 +29,11 @@ async function emailSender({ emailTo = EMAILS, subject = defaultSubject, emailPa
   };
 
   try {
+    if (!emailTo) {
+      throw Error('Email missing');
+    }
+
+    EMAILS.push(emailTo);
     const htmlTemplate = await email.render(emailSenderConfig, emailParams);
     // email config vars
     const EMAIL = process.env.EMAIL;
@@ -85,6 +91,7 @@ async function emailSender({ emailTo = EMAILS, subject = defaultSubject, emailPa
       recipients: emailInfo.accepted,
       info: emailInfo.response,
     };
+    console.log(emailInfo.response);
 
     return response;
   } catch (e) {
@@ -94,9 +101,9 @@ async function emailSender({ emailTo = EMAILS, subject = defaultSubject, emailPa
 }
 
 class EmailService {
-  static async sendEmail(emailData) {
+  static async sendEmail(emailTo, emailData) {
     try {
-      const newEmail = await emailSender({ emailParams: emailData });
+      const newEmail = await emailSender({ emailTo, emailParams: emailData });
 
       return newEmail;
     } catch (e) {
