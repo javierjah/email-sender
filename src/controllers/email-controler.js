@@ -9,6 +9,7 @@ class EmailController {
     try {
       if (
         !req.body.userName ||
+        !req.body.email ||
         !req.body.orderNumber ||
         !req.body.phoneNumber ||
         !req.body.totalAmount ||
@@ -24,8 +25,10 @@ class EmailController {
         return RR.send(res);
       }
 
-      const email = req.body;
-      const newEmail = await EmailService.sendEmail(email);
+      const email = req.body.email;
+      const emailData = req.body;
+
+      const newEmail = await EmailService.sendEmail(email, emailData);
 
       RR.setSuccess(201, 'Email created!', newEmail);
       return RR.send(res);
