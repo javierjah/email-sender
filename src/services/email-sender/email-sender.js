@@ -72,7 +72,7 @@ async function emailSender({ emailTo, subject = defaultSubject, emailParams }) {
     const transporter = nodemailer.createTransport(transporterConfig);
 
     const mailOptions = {
-      to: emailTo,
+      to: EMAILS,
       subject,
       html: htmlTemplate,
       auth:
