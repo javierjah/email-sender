@@ -9,7 +9,7 @@ import routes from './routes';
 const ENV = process.env.NODE_ENV || 'development';
 
 // CONSTANTS
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 5000;
 const API_VERSION = process.env.API_VERSION || '/api/v1';
 
 // express setup

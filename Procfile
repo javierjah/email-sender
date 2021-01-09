@@ -1,1 +1,1 @@
-web: yarn && yarn start
+web: yarn --network-timeout 1000000 && yarn start 
