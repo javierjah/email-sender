@@ -2,10 +2,12 @@ import path from 'path';
 import nodemailer from 'nodemailer';
 import EmailTemplates from 'email-templates';
 
-const templateDir = path.resolve(__dirname, 'templates', 'purchase');
+const SERVICE_CONTACT_EMAIL = 'serviceContactEmail';
+const PURCHASE_EMAIL = 'purchase';
+
 const defaultSubject = 'Pedido Agua y Arina  ✔';
-const defaultEmail = 'javier.palacios.h@gmail.com';
-const EMAILS = [defaultEmail];
+// const defaultEmail = 'javier.palacios.h@gmail.com';
+let EMAILS = [];
 
 // email-templates init to parse html files
 const email = new EmailTemplates({
@@ -17,7 +19,10 @@ const email = new EmailTemplates({
   },
 });
 
-async function emailSender({ emailTo, subject = defaultSubject, emailParams }) {
+async function emailSender({ emailTo, subject = defaultSubject, emailParams, template = PURCHASE_EMAIL }) {
+  const templateDir = path.resolve(__dirname, 'templates', template);
+
+  console.log('emailParams', emailParams);
   const emailSenderConfig = {
     path: templateDir,
     juiceResources: {
@@ -33,7 +38,12 @@ async function emailSender({ emailTo, subject = defaultSubject, emailParams }) {
       throw Error('Email missing');
     }
 
-    EMAILS.push(emailTo);
+    if (Array.isArray(emailTo)) {
+      EMAILS = [...EMAILS, ...emailTo];
+    } else {
+      EMAILS.push(emailTo);
+    }
+
     const htmlTemplate = await email.render(emailSenderConfig, emailParams);
     // email config vars
     const EMAIL = process.env.EMAIL;
@@ -101,9 +111,20 @@ async function emailSender({ emailTo, subject = defaultSubject, emailParams }) {
 }
 
 class EmailService {
-  static async sendEmail(emailTo, emailData) {
+  static async sendEmail(emailTo, emailData, subject = undefined) {
     try {
-      const newEmail = await emailSender({ emailTo, emailParams: emailData });
+      const newEmail = await emailSender({ emailTo, subject, emailParams: emailData });
+
+      return newEmail;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  static async sendContactEmail(emailTo, emailData, subject = undefined, template = SERVICE_CONTACT_EMAIL) {
+    try {
+      const newEmail = await emailSender({ emailTo, subject, emailParams: emailData, template });
 
       return newEmail;
     } catch (e) {
