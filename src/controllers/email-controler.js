@@ -1,6 +1,6 @@
 import EmailService from '../services/email-sender';
 import RestResponses from '../utils/RestResponses';
-import createEmailMissingParamsMessage from '../utils/strings';
+import { createEmailMissingParamsMessage, createContactEmailMissingParamsMessage } from '../utils/strings';
 
 const RR = new RestResponses();
 
@@ -31,6 +31,38 @@ class EmailController {
       const newEmail = await EmailService.sendEmail(email, emailData);
 
       RR.setSuccess(201, 'Email created!', newEmail);
+      return RR.send(res);
+    } catch (e) {
+      RR.setError(400, e.message);
+      return RR.send(res);
+    }
+  }
+
+  static async sendContactEmail(req, res) {
+    const SERVICE_CONTACT_EMAIL = 'serviceContactEmail';
+    console.log('req.body', req.body);
+    try {
+      if (
+        !req.body.userName ||
+        !req.body.email ||
+        !req.body.companyEmail ||
+        !req.body.phoneNumber ||
+        !req.body.description ||
+        !req.body.companyName
+      ) {
+        const errorMsg = createContactEmailMissingParamsMessage(req.body);
+        RR.setError(400, errorMsg);
+        return RR.send(res);
+      }
+
+      const template = req.body.template || SERVICE_CONTACT_EMAIL;
+      const subject = req.body.subject || 'Contacto de Servicio';
+      const email = req.body.companyEmail;
+      const emailData = req.body;
+
+      const newEmail = await EmailService.sendContactEmail(email, emailData, subject, template);
+
+      RR.setSuccess(201, 'Email Sended!', newEmail);
       return RR.send(res);
     } catch (e) {
       RR.setError(400, e.message);

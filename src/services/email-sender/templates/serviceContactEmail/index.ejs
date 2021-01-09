@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="style.css" data-inline="data-inline" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+  rel="stylesheet"
+/>
+
+<div class="email-container">
+  <div class="email-wrapper">
+    <div class="header-container">
+      <div class="link header-link">
+        <div class="header-text"><%= companyName %></div>
+      </div>
+    </div>
+    <div class="email-body">
+      <h2 class="title">
+        <div><%= userName %> quiere</div>
+        <div>contactar contigo</div>
+      </h2>
+      <div class="divider"></div>
+      <div class="order-details">
+        <div class="order-title">Informacion de contacto</div>
+        <br />
+        <div class="divider"></div>
+        <br />
+        <div class="order-details-container">
+          <div class="order-subtitle">
+            <b>Contacto</b>
+          </div>
+          <div class="order-detail">
+            <%= userName %>
+          </div>
+          <div class="order-detail">
+            <%= email %>
+          </div>
+          <div class="order-detail">
+            <%= phoneNumber %>
+          </div>
+        </div>
+        <div class="order-details-container">
+          <div class="order-subtitle">
+            <b>Mensaje</b>
+          </div>
+          <div class="order-detail">
+            <%= description %>
+          </div>
+        </div>
+        <% if (typeof service == 'string' && service) { %>
+        <div class="order-details-container">
+          <div class="order-subtitle">
+            <b>Tipo Servicio</b>
+          </div>
+            <div class="order-detail">
+              <%= service %>
+            </div>
+          </div>
+          <% } %>
+      </div>
+      <div class="divider"></div>
+      <br />
+      </div>
+    </div>
+  </div>
+</div>
