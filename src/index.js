@@ -29,6 +29,6 @@ app.get('/healthz', (req, res) => {
   return res.status(200).send('I am happy and healthy\n');
 });
 
-app.listen(PORT, () => {
+app.listen(PORT || 5000, () => {
   console.log(`email-sender-service listening on port ${PORT}, on ${ENV} env`);
 });

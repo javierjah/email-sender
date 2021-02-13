@@ -40,7 +40,6 @@ class EmailController {
 
   static async sendContactEmail(req, res) {
     const SERVICE_CONTACT_EMAIL = 'serviceContactEmail';
-    console.log('req.body', req.body);
     try {
       if (
         !req.body.userName ||

@@ -5,9 +5,7 @@ import EmailTemplates from 'email-templates';
 const SERVICE_CONTACT_EMAIL = 'serviceContactEmail';
 const PURCHASE_EMAIL = 'purchase';
 
-const defaultSubject = 'Pedido Agua y Arina  ✔';
-// const defaultEmail = 'javier.palacios.h@gmail.com';
-let EMAILS = [];
+const defaultSubject = 'Contacto  ✔';
 
 // email-templates init to parse html files
 const email = new EmailTemplates({
@@ -22,7 +20,6 @@ const email = new EmailTemplates({
 async function emailSender({ emailTo, subject = defaultSubject, emailParams, template = PURCHASE_EMAIL }) {
   const templateDir = path.resolve(__dirname, 'templates', template);
 
-  console.log('emailParams', emailParams);
   const emailSenderConfig = {
     path: templateDir,
     juiceResources: {
@@ -34,16 +31,6 @@ async function emailSender({ emailTo, subject = defaultSubject, emailParams, tem
   };
 
   try {
-    if (!emailTo) {
-      throw Error('Email missing');
-    }
-
-    if (Array.isArray(emailTo)) {
-      EMAILS = [...EMAILS, ...emailTo];
-    } else {
-      EMAILS.push(emailTo);
-    }
-
     const htmlTemplate = await email.render(emailSenderConfig, emailParams);
     // email config vars
     const EMAIL = process.env.EMAIL;
@@ -82,7 +69,7 @@ async function emailSender({ emailTo, subject = defaultSubject, emailParams, tem
     const transporter = nodemailer.createTransport(transporterConfig);
 
     const mailOptions = {
-      to: EMAILS,
+      to: emailTo,
       subject,
       html: htmlTemplate,
       auth:
